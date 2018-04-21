@@ -245,6 +245,9 @@
     <Compile Include="Assets\Scripts\PriorityQueue\IPriorityQueue.cs" />
     <Compile Include="Assets\Scripts\PriorityQueue\PriorityQueueNode.cs" />
     <Compile Include="Assets\Scripts\TileMapScript.cs" />
+    <Compile Include="Assets\Scripts\World.cs" />
+    <Compile Include="Assets\Scripts\WorldSegment.cs" />
+    <Compile Include="Assets\Scripts\WrapObject.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />
