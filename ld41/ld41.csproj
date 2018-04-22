@@ -235,6 +235,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Hangglider.cs" />
     <Compile Include="Assets\Scripts\AddChildren.cs" />
     <Compile Include="Assets\Scripts\CameraMenuScript.cs" />
     <Compile Include="Assets\Scripts\CameraSizer.cs" />

@@ -12,6 +12,8 @@ public class WorldSegment : MonoBehaviour {
         Vector3[] verts = new Vector3[4];
         Vector3[] normals = new Vector3[4];
         //Vector2[] uv = new Vector2[4];
+        float green = 0.5f + 0.6f * Mathf.Tan(right - left);
+        Color col = new Color(0f, green, 0f);
 
         int[] tris = new int[6];
         Vector3 towardCamera = new Vector3(0, 0, -1f);
@@ -20,6 +22,7 @@ public class WorldSegment : MonoBehaviour {
         verts[1] = new Vector3( 1.0f * Segment_Width, -100f, 0.0f);
         verts[2] = new Vector3(-0.0f * Segment_Width, /*Random.Range(0.0f, Segment_Height)*/left, 0.0f);
         verts[3] = new Vector3( 1.0f * Segment_Width, /*Random.Range(0.0f, Segment_Height)*/right, 0.0f);
+        
 
         tris[0]  =  0;
         tris[ 1] =  2;
@@ -47,6 +50,7 @@ public class WorldSegment : MonoBehaviour {
         collPath[4] = new Vector2(-0.0f * Segment_Width, -100f);
 
         GetComponent<PolygonCollider2D>().SetPath(0, collPath);
+        GetComponent<Renderer>().material.color = col;
     }
 
 	// Use this for initialization

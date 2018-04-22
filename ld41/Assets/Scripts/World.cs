@@ -5,6 +5,7 @@ using UnityEngine;
 public class World : MonoBehaviour {
     public int NumberOfSegmentsEachDir = 300;
     public GameObject WorldSegment;
+    public GameObject Sky;
 
     Camera mainCamera;
 
@@ -38,9 +39,10 @@ public class World : MonoBehaviour {
         const float UPDRAUGHT_SCALE = 2.0f;
         float height_scale = Mathf.Max(1.0f, Mathf.Min(0.0f, (1000 - (y - 100f)) * 0.001f));
 
-        float pos = x;// ScaleXCoord(x);
-        pos = (pos + NumberOfSegmentsEachDir*3) % ( NumberOfSegmentsEachDir*2);
+        float pos =  x; 
+        pos = (pos + NumberOfSegmentsEachDir) % ( NumberOfSegmentsEachDir*2);
         int index = (int)pos;
+        if (index < 0) index += NumberOfSegmentsEachDir * 2; //% can give negative answers.
 
         if(index < 0 || index >= NumberOfSegmentsEachDir * 2)
         {
@@ -57,8 +59,9 @@ public class World : MonoBehaviour {
     {
 
         float pos = x;
-        pos = (pos + NumberOfSegmentsEachDir*3) % (NumberOfSegmentsEachDir*2);
+        pos = (pos + NumberOfSegmentsEachDir) % (NumberOfSegmentsEachDir*2);
         int index = (int)pos;
+        if (index < 0) index += NumberOfSegmentsEachDir * 2; //% can give negative answers.
         float fraction = pos - (int)pos;
 
         if (index < 0 || index >= NumberOfSegmentsEachDir * 2)
@@ -141,23 +144,23 @@ public class World : MonoBehaviour {
         //create initial clouds
         for (int i = 0; i < 25; i++)
         {
-            Vector3 pos = new Vector3(Random.Range(-1f, 1f) * NumberOfSegmentsEachDir, Random.Range(28f, 50f));
+            Vector3 pos = new Vector3(Random.Range(-1f, 1f) * NumberOfSegmentsEachDir, Random.Range(17f, 40f));
             CreateCloud(pos);
         }
     }
 
     void CreateCloud(Vector3 pos)
     {
-        const float CLOUDHALFWIDTH = 1.5f;
-        const float CLOUDHALFHEIGHT = 1f;
+        const float CLOUDHALFWIDTH = 1.9f;
+        const float CLOUDHALFHEIGHT = 1.3f;
         Vector3 CloudVel = new Vector3(-Random.Range(0.5f, 1.5f),0f,0f);
 
-        for (int i = 0; i < 20; i++)
+        for (int i = 0; i < 25; i++)
         {
             float angle = Random.Range(0, 6.2831853f);
             float dist = Random.Range(0.05f, 1.0f);
-            Vector3 totalpos = pos + new Vector3(CLOUDHALFWIDTH * Mathf.Sin(angle) * dist, CLOUDHALFHEIGHT * Mathf.Cos(angle) * dist, 0f);
-            float size = Random.Range(0.9f, 1.5f);
+            Vector3 totalpos = pos + new Vector3(CLOUDHALFWIDTH * Mathf.Sin(angle) * dist, CLOUDHALFHEIGHT * Mathf.Cos(angle) * dist, -5f);
+            float size = Random.Range(1.2f, 2f);
             /*byte grey = (byte)Random.Range(128,255);
             byte alpha = (byte)Random.Range(64, 210);
             Color32 col = new Color32(grey, grey, grey, alpha);*/
@@ -171,12 +174,16 @@ public class World : MonoBehaviour {
         }
     }
 
+    Menu EndMenu;
 	// Use this for initialization
 	void Start ()
     {
         mainCamera = Camera.main;
         GenerateWorld();
-	}
+
+        EndMenu = this.gameObject.AddComponent<Menu>();
+        EndMenu.AddButtonItem("All velociraptors dream of flying! Now back to the party!", delegate () { UnityEngine.SceneManagement.SceneManager.LoadScene("SuperVelociraptorParty"); });
+    }
 
     void UpdateParticles(float deltaTime)
     {
@@ -197,8 +204,10 @@ public class World : MonoBehaviour {
                 //Debug.Log( prev + " -> " + pos + ", " + particles[i].position.x);
             }
 
-            float newvel = GetUpdraughtAtCoord(pos, particles[i].position.y); // particles[i].velocity.y + deltaTime * GetUpdraughtAtCoord(pos, particles[i].position.y) * CLOUD_DRAG;
-            if(newvel != particles[i].velocity.y)
+            float newvel = GetUpdraughtAtCoord(pos, particles[i].position.y);;
+            if (particles[i].velocity.x == 0) newvel += particles[i].velocity.y + deltaTime;
+                 // particles[i].velocity.y + deltaTime * GetUpdraughtAtCoord(pos, particles[i].position.y) * CLOUD_DRAG;
+            if (newvel != particles[i].velocity.y)
             {
                 particles[i].velocity = new Vector3(particles[i].velocity.x, newvel, particles[i].velocity.z);
             }
@@ -219,10 +228,35 @@ public class World : MonoBehaviour {
         }
 
     }
+
+    public void EndGame()
+    {
+        EndMenu.Enable();
+    }
+
+    void AddThermal()
+    {
+        float x = mainCamera.transform.position.x + Random.Range(-20f, 20f);
+        float updraught = GetUpdraughtAtCoord(x, 0);
+
+        if(updraught > 0)
+        {
+            Vector3 pos = new Vector3(x, GetHeightAtX(x) - 2.5f, 5f);
+            Vector3 vel = new Vector3(0f, updraught*1f, 0f);
+            float grey = Random.Range(.5f, 1f) * .5f;
+            float alpha = Random.Range(.5f, .9f) * .4f;
+            Color col = new Color(grey, grey, grey, alpha);
+
+            GetComponent<ParticleSystem>().Emit(pos, vel, .5f, 1f, col);
+            Debug.Log("Thermal added at " + pos);
+        }
+
+    }
 	
 	// Update is called once per frame
 	void Update ()
     {
+        Sky.transform.position = new Vector3(mainCamera.transform.position.x, Sky.transform.position.y, Sky.transform.position.z);
         UpdateParticles(Time.deltaTime);
 
         if(Debug.isDebugBuild) DrawUpdraughts();
@@ -230,9 +264,11 @@ public class World : MonoBehaviour {
         if(Random.Range(0,1000) == 0)
         {
 
-            Vector3 pos = new Vector3(mainCamera.transform.position.x + Random.Range(0.5f, 1.5f) * NumberOfSegmentsEachDir, Random.Range(28f, 50f));
+            Vector3 pos = new Vector3(mainCamera.transform.position.x + Random.Range(0.5f, 1.5f) * NumberOfSegmentsEachDir, Random.Range(17f, 40f));
             CreateCloud(pos);
             Debug.Log("A new cloud appears at " + pos);
         }
+
+        if (Random.Range(0, 50) == 0) AddThermal();
 	}
 }
