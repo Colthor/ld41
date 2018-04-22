@@ -8,6 +8,7 @@ public class WorldSegment : MonoBehaviour {
     public void SetHeights(float left, float right)
     {
 
+        Vector2[] collPath = new Vector2[5];
         Vector3[] verts = new Vector3[4];
         Vector3[] normals = new Vector3[4];
         //Vector2[] uv = new Vector2[4];
@@ -37,6 +38,15 @@ public class WorldSegment : MonoBehaviour {
         mesh.normals = normals;
         //mesh.uv = uv;
         GetComponent<MeshFilter>().mesh = mesh;
+
+
+        collPath[0] = new Vector2(-0.0f * Segment_Width, -100f);
+        collPath[1] = new Vector2( 1.0f * Segment_Width, -100f);
+        collPath[2] = new Vector2( 1.0f * Segment_Width, right);
+        collPath[3] = new Vector2(-0.0f * Segment_Width, left);
+        collPath[4] = new Vector2(-0.0f * Segment_Width, -100f);
+
+        GetComponent<PolygonCollider2D>().SetPath(0, collPath);
     }
 
 	// Use this for initialization
