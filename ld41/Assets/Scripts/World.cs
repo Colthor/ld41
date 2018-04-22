@@ -39,10 +39,35 @@ public class World : MonoBehaviour {
         float height_scale = Mathf.Max(1.0f, Mathf.Min(0.0f, (1000 - (y - 100f)) * 0.001f));
 
         float pos = x;// ScaleXCoord(x);
-        pos = pos % (2 * NumberOfSegmentsEachDir);
-        int index = (int)pos + NumberOfSegmentsEachDir;
+        pos = (pos + NumberOfSegmentsEachDir*3) % ( NumberOfSegmentsEachDir*2);
+        int index = (int)pos;
+
+        if(index < 0 || index >= NumberOfSegmentsEachDir * 2)
+        {
+            Debug.Log("GetUpdraughtAtCoord OOR for input " + x + " -> index " + index);
+            return 0;
+        }
 
         return height_scale * UPDRAUGHT_SCALE * m_Updraught[index];
+
+    }
+
+
+    public float GetHeightAtX(float x)
+    {
+
+        float pos = x;
+        pos = (pos + NumberOfSegmentsEachDir*3) % (NumberOfSegmentsEachDir*2);
+        int index = (int)pos;
+        float fraction = pos - (int)pos;
+
+        if (index < 0 || index >= NumberOfSegmentsEachDir * 2)
+        {
+            Debug.Log("GetHeightAtX OOR for input " + x + " -> index " + index);
+            return m_Heights[0];
+        }
+
+        return (1f - fraction) * m_Heights[index] + fraction * m_Heights[index+1];
 
     }
 
@@ -55,6 +80,7 @@ public class World : MonoBehaviour {
             m_Updraught[i] = Mathf.Max(0, Mathf.Tan(m_Heights[i + 1] - m_Heights[i]));
            // Debug.Log(i + ": " + m_Updraught[i]);
         }
+
 
     }
 
@@ -77,9 +103,10 @@ public class World : MonoBehaviour {
 
         float fadeTo = 0.5f * (m_Heights[NumberOfSegmentsEachDir * 2] + m_Heights[0]);
 
-        for (int i = 0; i < 31; i += 1)
+        for (int i = 0; i < 61; i += 1)
         {
-            float fadeAmt =  (float)(i )/30f;
+            float fadeAmt =  (float)(i )/60f;
+            //fadeAmt = fadeAmt * fadeAmt;
             //Debug.Log(fadeAmt);
             m_Heights[i] = fadeAmt * m_Heights[i] + (1f - fadeAmt) * fadeTo;
             int j = NumberOfSegmentsEachDir * 2 - i;
@@ -112,34 +139,34 @@ public class World : MonoBehaviour {
         }
 
         //create initial clouds
-        for (int i = 0; i < 50; i++)
+        for (int i = 0; i < 25; i++)
         {
-            Vector3 pos = new Vector3(Random.Range(-1f, 1f) * NumberOfSegmentsEachDir, Random.Range(28f, 100f));
+            Vector3 pos = new Vector3(Random.Range(-1f, 1f) * NumberOfSegmentsEachDir, Random.Range(28f, 50f));
             CreateCloud(pos);
         }
     }
 
     void CreateCloud(Vector3 pos)
     {
-        const float CLOUDHALFWIDTH = 2.5f;
+        const float CLOUDHALFWIDTH = 1.5f;
         const float CLOUDHALFHEIGHT = 1f;
         Vector3 CloudVel = new Vector3(-Random.Range(0.5f, 1.5f),0f,0f);
 
         for (int i = 0; i < 20; i++)
         {
             float angle = Random.Range(0, 6.2831853f);
-            float dist = Random.Range(0.1f, 1.0f);
+            float dist = Random.Range(0.05f, 1.0f);
             Vector3 totalpos = pos + new Vector3(CLOUDHALFWIDTH * Mathf.Sin(angle) * dist, CLOUDHALFHEIGHT * Mathf.Cos(angle) * dist, 0f);
-            float size = Random.Range(0.6f, 1.3f);
+            float size = Random.Range(0.9f, 1.5f);
             /*byte grey = (byte)Random.Range(128,255);
             byte alpha = (byte)Random.Range(64, 210);
             Color32 col = new Color32(grey, grey, grey, alpha);*/
 
-            float grey = Random.Range(.5f, 1f);
-            float alpha = Random.Range(.5f, .9f);
+            float grey = Random.Range(.5f, 1f)*.5f;
+            float alpha = Random.Range(.5f, .9f)*.5f;
             Color col = new Color(grey, grey, grey, alpha);
 
-            GetComponent<ParticleSystem>().Emit(totalpos, CloudVel, size, 100.0f, col);
+            GetComponent<ParticleSystem>().Emit(totalpos, CloudVel, size, Random.Range(100.0f, 200.0f), col);
 
         }
     }
@@ -153,6 +180,7 @@ public class World : MonoBehaviour {
 
     void UpdateParticles(float deltaTime)
     {
+        //const float CLOUD_DRAG = 0.5f;
         ParticleSystem ps = GetComponent<ParticleSystem>();
         ParticleSystem.Particle[] particles = new ParticleSystem.Particle[ps.particleCount];
 
@@ -164,18 +192,31 @@ public class World : MonoBehaviour {
             if (pos != particles[i].position.x)
             {
                 //float prev = particles[i].position.x;
-                particles[i].position += new Vector3( particles[i].position.x - pos, 0f); //= new Vector3( pos, particles[i].position.y, particles[i].position.z);
+                /*+= new Vector3( pos - particles[i].position.x, 0f); */
+                particles[i].position  = new Vector3( pos, particles[i].position.y, particles[i].position.z);
                 //Debug.Log( prev + " -> " + pos + ", " + particles[i].position.x);
             }
 
-            float accel = deltaTime * GetUpdraughtAtCoord(pos, particles[i].position.y);
-            if(accel != 0f)
+            float newvel = GetUpdraughtAtCoord(pos, particles[i].position.y); // particles[i].velocity.y + deltaTime * GetUpdraughtAtCoord(pos, particles[i].position.y) * CLOUD_DRAG;
+            if(newvel != particles[i].velocity.y)
             {
-                particles[i].velocity += new Vector3(0.0f, accel);
+                particles[i].velocity = new Vector3(particles[i].velocity.x, newvel, particles[i].velocity.z);
             }
             
         }
         ps.SetParticles(particles, count);
+
+    }
+
+    void DrawUpdraughts()
+    {
+        for(float x = mainCamera.transform.position.x - NumberOfSegmentsEachDir; x < mainCamera.transform.position.x + NumberOfSegmentsEachDir; x +=1f)
+        {
+            float bottom = GetHeightAtX(x);
+            float top = bottom + 20 * GetUpdraughtAtCoord(x, 0f);
+
+            Debug.DrawLine(new Vector3(x, bottom), new Vector3(x, top));
+        }
 
     }
 	
@@ -183,5 +224,15 @@ public class World : MonoBehaviour {
 	void Update ()
     {
         UpdateParticles(Time.deltaTime);
+
+        if(Debug.isDebugBuild) DrawUpdraughts();
+
+        if(Random.Range(0,1000) == 0)
+        {
+
+            Vector3 pos = new Vector3(mainCamera.transform.position.x + Random.Range(0.5f, 1.5f) * NumberOfSegmentsEachDir, Random.Range(28f, 50f));
+            CreateCloud(pos);
+            Debug.Log("A new cloud appears at " + pos);
+        }
 	}
 }
