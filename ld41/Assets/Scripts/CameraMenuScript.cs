@@ -156,9 +156,9 @@ public class CameraMenuScript : MonoBehaviour {
         FizzBuzzCurrent.AddButtonItem("" + num + "!",
             delegate () { if (!(fizz || buzz)) { PlayFizzBuzz(num + 1); } else { LoseFizzBuzz(num); }; });
         FizzBuzzCurrent.AddButtonItem("Fizz!",
-            delegate () { if (fizz) { PlayFizzBuzz(num + 1); } else { LoseFizzBuzz(num); }; });
+            delegate () { if (fizz && !buzz) { PlayFizzBuzz(num + 1); } else { LoseFizzBuzz(num); }; });
         FizzBuzzCurrent.AddButtonItem("Buzz!",
-            delegate () { if (buzz) { PlayFizzBuzz(num + 1); } else { LoseFizzBuzz(num); }; });
+            delegate () { if (buzz && !fizz) { PlayFizzBuzz(num + 1); } else { LoseFizzBuzz(num); }; });
         FizzBuzzCurrent.AddButtonItem("FizzBuzz!",
             delegate () { if (fizz && buzz) { PlayFizzBuzz(num + 1); } else { LoseFizzBuzz(num); }; });
 

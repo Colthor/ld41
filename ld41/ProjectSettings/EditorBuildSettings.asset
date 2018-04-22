@@ -4,4 +4,10 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/SuperVelociraptorParty.unity
+    guid: 442be693cde9ea740907d80a97df2fc7
+  - enabled: 1
+    path: Assets/Scenes/Hanggliding.unity
+    guid: ee7cb438a4150734290e10d1ec239c7c

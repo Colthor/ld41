@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class WrapObject : MonoBehaviour {
 
-    public float WorldWidth = 200.0f;
+    public float WorldWidth = 600.0f;
     Camera mainCamera;
 	// Use this for initialization
 	void Start () {

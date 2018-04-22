@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class WorldSegment : MonoBehaviour {
     public float Segment_Width = 1f;
-    public float Segment_Height = 1f;
 
-	// Use this for initialization
-	void Start () {
+    public void SetHeights(float left, float right)
+    {
+
         Vector3[] verts = new Vector3[4];
         Vector3[] normals = new Vector3[4];
         //Vector2[] uv = new Vector2[4];
@@ -15,10 +15,10 @@ public class WorldSegment : MonoBehaviour {
         int[] tris = new int[6];
         Vector3 towardCamera = new Vector3(0, 0, -1f);
 
-        verts[0] = new Vector3(-0.0f * Segment_Width, -1f, 0.0f);
-        verts[1] = new Vector3( 1.0f * Segment_Width, -1f, 0.0f);
-        verts[2] = new Vector3(-0.0f * Segment_Width, Random.Range(0.0f, Segment_Height), 0.0f);
-        verts[3] = new Vector3( 1.0f * Segment_Width, Random.Range(0.0f, Segment_Height), 0.0f);
+        verts[0] = new Vector3(-0.0f * Segment_Width, -100f, 0.0f);
+        verts[1] = new Vector3( 1.0f * Segment_Width, -100f, 0.0f);
+        verts[2] = new Vector3(-0.0f * Segment_Width, /*Random.Range(0.0f, Segment_Height)*/left, 0.0f);
+        verts[3] = new Vector3( 1.0f * Segment_Width, /*Random.Range(0.0f, Segment_Height)*/right, 0.0f);
 
         tris[0]  =  0;
         tris[ 1] =  2;
@@ -37,6 +37,10 @@ public class WorldSegment : MonoBehaviour {
         mesh.normals = normals;
         //mesh.uv = uv;
         GetComponent<MeshFilter>().mesh = mesh;
+    }
+
+	// Use this for initialization
+	void Start () {
     }
 	
 	// Update is called once per frame
