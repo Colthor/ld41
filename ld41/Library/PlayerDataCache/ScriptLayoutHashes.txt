@@ -1,6 +1,6 @@
-WindowsStandalone
+WebGL
 PlayerPath?
-D:/docs/Code/ld41/ld41/build/SuperVelociraptorParty.exe
+D:/docs/Code/ld41/ld41/build
 SceneListBegin?
 Assets/Scenes/SuperVelociraptorParty.unity
 Assets/Scenes/Hanggliding.unity
@@ -152,8 +152,9 @@ bc68edb0af574bf79f9550ead8ebae5c UnityEngine.HoloLens.dll:UnityEngine.Audio.Audi
 463516d5b5fe8e67a0a24c48f2095b04 UnityEngine.HoloLens.dll:UnityEngine.EventSystems.HoloLensInputModule
 c2275a8bfbb9f9942cad75ecdfded41d UnityEngine.HoloLens.dll:UnityEngine.XR.WSA.SpatialMappingCollider
 45f3431f0103c41611e8d4eec3d439df UnityEngine.HoloLens.dll:UnityEngine.XR.WSA.SpatialMappingRenderer
-2544a61156e245c08cc2603f39c5e144 Assembly-CSharp.dll:.World
-f6c294cc28400f1cf9c25982c34e3f91 Assembly-CSharp.dll:.Menu
+e41111d0834d0250e8593e5879c6244e Assembly-CSharp.dll:.World
+07b3cf3b9ecfa910209b62ad1b8ae5c0 Assembly-CSharp.dll:.Menu
 9de3a22eca9aefadba2d10d5987cefe3 UnityEngine.SpatialTracking.dll:UnityEngine.SpatialTracking.TrackedPoseDriver
 4edad73d486a813d5d1c8ff3177cf024 Assembly-CSharp.dll:.CameraMenuScript
 adf1f23131a7b3d43d748f72bc9a7421 Assembly-CSharp.dll:.WorldSegment
+cd461093009fcdf1d8117fba8b2f6424 Assembly-CSharp.dll:.Hangglider

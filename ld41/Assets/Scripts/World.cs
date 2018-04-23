@@ -6,6 +6,7 @@ public class World : MonoBehaviour {
     public int NumberOfSegmentsEachDir = 300;
     public GameObject WorldSegment;
     public GameObject Sky;
+    public GUISkin GuiSkin;
 
     Camera mainCamera;
 
@@ -182,6 +183,8 @@ public class World : MonoBehaviour {
         GenerateWorld();
 
         EndMenu = this.gameObject.AddComponent<Menu>();
+        EndMenu.GuiSkin = GuiSkin;
+        EndMenu.MenuTop = 500;
         EndMenu.AddButtonItem("All velociraptors dream of flying! Now back to the party!", delegate () { UnityEngine.SceneManagement.SceneManager.LoadScene("SuperVelociraptorParty"); });
     }
 

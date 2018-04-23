@@ -16,7 +16,13 @@ public class CameraMenuScript : MonoBehaviour {
         if (WerewolfMenu != null) Destroy(WerewolfMenu);
         if (WerewolfMenu2 != null) Destroy(WerewolfMenu2);
         WerewolfMenu = this.gameObject.AddComponent<Menu>();
+        WerewolfMenu.GuiSkin = GuiSkin;
+        WerewolfMenu.MenuTop = 50;
+        WerewolfMenu.MenuLeftOffset = 200;
         WerewolfMenu2 = this.gameObject.AddComponent<Menu>();
+        WerewolfMenu2.GuiSkin = GuiSkin;
+        WerewolfMenu2.MenuTop = 50;
+        WerewolfMenu2.MenuLeftOffset = 200;
 
         int i = Random.Range(0, 4);
         switch (i)
@@ -75,7 +81,12 @@ public class CameraMenuScript : MonoBehaviour {
 
         FizzBuzzCurrent.Disable();
         FizzBuzzEndMenu = this.gameObject.AddComponent<Menu>();
-        FizzBuzzEndMenu.AddButtonItem("Nope, you lose, sorry! The correct answer was " + correct + ".", delegate () { FizzBuzzEndMenu.Disable(); MainMenu2.Enable(); });
+
+        FizzBuzzEndMenu.GuiSkin = GuiSkin;
+        FizzBuzzEndMenu.MenuTop = 50;
+        FizzBuzzEndMenu.MenuLeftOffset = 200;
+
+        FizzBuzzEndMenu.AddButtonItem("Nope, you lose, sorry!\nThe correct answer was " + correct + ".", delegate () { FizzBuzzEndMenu.Disable(); MainMenu2.Enable(); });
 
         FizzBuzzEndMenu.Enable();
     }
@@ -88,6 +99,9 @@ public class CameraMenuScript : MonoBehaviour {
             Destroy(FizzBuzzCurrent);
         }
         FizzBuzzCurrent = this.gameObject.AddComponent<Menu>();
+        FizzBuzzCurrent.GuiSkin = GuiSkin;
+        FizzBuzzCurrent.MenuTop = 50;
+        FizzBuzzCurrent.MenuLeftOffset = 200;
 
         bool fizz = (num % 3) == 0;
         bool buzz = (num % 5) == 0;
@@ -124,7 +138,12 @@ public class CameraMenuScript : MonoBehaviour {
 		MainMenu2.AddButtonItem("Ooh, hang gliding!", delegate() { UnityEngine.SceneManagement.SceneManager.LoadScene("Hanggliding"); });
 
         MainMenu.GuiSkin = GuiSkin;
+        MainMenu.MenuTop = 50;
+        MainMenu.MenuLeftOffset = 200;
+
         MainMenu2.GuiSkin = GuiSkin;
+        MainMenu2.MenuTop = 50;
+        MainMenu2.MenuLeftOffset = 200;
 
         MainMenu.Enable();
 

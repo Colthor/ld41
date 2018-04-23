@@ -10,6 +10,7 @@ public class Menu : MonoBehaviour {
 	public KeyCode ActionKey = KeyCode.Space;
 
 	public float MenuTop = 200;
+	public float MenuLeftOffset = 0;
 	public float LineWidth = 50;
 
 	public GUISkin GuiSkin;
@@ -142,7 +143,7 @@ public class Menu : MonoBehaviour {
 		//Debug.Log("Drawing menu:");
 		for(int i = 0; i < m_menuItems.Count; i++)
 		{
-			DrawMenuItem(i, Screen.width/2, MenuTop+i*LineWidth);
+			DrawMenuItem(i, Screen.width/2 + MenuLeftOffset, MenuTop+i*LineWidth);
 		}
 	}
 

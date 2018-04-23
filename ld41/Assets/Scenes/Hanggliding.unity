@@ -243,6 +243,7 @@ MonoBehaviour:
   WorldSegment: {fileID: 1144596625403982, guid: 89fa7d77d3d4c494e9bfcd49e7226363,
     type: 2}
   Sky: {fileID: 2051117088}
+  GuiSkin: {fileID: 11400000, guid: 1fa9d069776536742a9ce68d154a6f26, type: 2}
 --- !u!4 &579580697
 Transform:
   m_ObjectHideFlags: 0
@@ -371,7 +372,7 @@ ParticleSystem:
   moveWithTransform: 1
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
-  randomSeed: 767997525
+  randomSeed: 1371557129
   InitialModule:
     serializedVersion: 3
     enabled: 1

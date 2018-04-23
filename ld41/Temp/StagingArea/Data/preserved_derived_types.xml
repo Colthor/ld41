@@ -1,0 +1,14 @@
+<linker>
+<assembly fullname="Assembly-CSharp">
+<type fullname="Hangglider" preserve="all"/>
+<type fullname="AddChildren" preserve="all"/>
+<type fullname="CameraMenuScript" preserve="all"/>
+<type fullname="CameraSizer" preserve="all"/>
+<type fullname="Menu" preserve="all"/>
+<type fullname="PathFindTest" preserve="all"/>
+<type fullname="TileMapScript" preserve="all"/>
+<type fullname="World" preserve="all"/>
+<type fullname="WorldSegment" preserve="all"/>
+<type fullname="WrapObject" preserve="all"/>
+</assembly>
+</linker>
