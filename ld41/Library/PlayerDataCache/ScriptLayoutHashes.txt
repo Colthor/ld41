@@ -1,6 +1,6 @@
-WebGL
+WindowsStandalone
 PlayerPath?
-D:/docs/Code/ld41/ld41/build
+D:/docs/Code/ld41/ld41/build/Win64/SuperVelociraptorParty.exe
 SceneListBegin?
 Assets/Scenes/SuperVelociraptorParty.unity
 Assets/Scenes/Hanggliding.unity
